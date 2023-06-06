@@ -92,6 +92,7 @@ def main():
             payments = payments.append({'Payer': 'Zane', 'Receiver': 'Zane', 'Amount': debt_each}, ignore_index=True)
             payments = payments.append({'Payer': 'Austin', 'Receiver': 'Austin', 'Amount': debt_each}, ignore_index=True)
 
+        st.write('PAYMENTS')
         st.dataframe(payments)
 
 if __name__ == "__main__":

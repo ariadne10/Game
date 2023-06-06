@@ -35,7 +35,7 @@ def generate_payments(winners, losers):
     n_winners = winners.shape[0]
     n_losers = losers.shape[0]
 
-    output_text = ""
+    payments = pd.DataFrame(columns=['Payer', 'Receiver', 'Amount'])
     count_winner, count_loser = 0, 0
     total_debt = 0
 
@@ -45,23 +45,23 @@ def generate_payments(winners, losers):
 
         while loser_amount >= winner_amount and count_winner < n_winners:
             loser_amount -= winner_amount
-            output_text += f"{losers.iloc[count_loser, 0]} pays {winners.iloc[count_winner, 0]} {winner_amount}\n"
+            payments = payments.append({'Payer': losers.iloc[count_loser, 0], 'Receiver': winners.iloc[count_winner, 0], 'Amount': winner_amount}, ignore_index=True)
             count_winner += 1
             winner_amount = winners.iloc[count_winner, 1]
 
         if loser_amount > winner_amount or count_loser == n_losers:
             loser_amount -= winner_amount
-            output_text += f"{losers.iloc[count_loser, 0]} pays {winners.iloc[count_winner, 0]} {winner_amount}\n"
+            payments = payments.append({'Payer': losers.iloc[count_loser, 0], 'Receiver': winners.iloc[count_winner, 0], 'Amount': winner_amount}, ignore_index=True)
             if count_winner < n_winners - 1:
                 count_winner += 1
                 winner_amount = winners.iloc[count_winner, 1]
-
 
         if count_winner == n_winners and winner_amount > 0:
             total_debt += winner_amount
             count_winner += 1
 
-    return output_text, total_debt
+    return payments, total_debt
+
 
 def main():
     uploaded_file = st.file_uploader("Upload your excel file", type=["xlsx"])
@@ -85,17 +85,17 @@ def main():
         total_winning = sum(winners['This Week'])
         if total_winning > total_funds:
             st.write("Warning: Total winnings are greater than total funds available. Remaining debt will be split between Zane and Austin.")
-        
+
         st.write('PAYMENTS')
-        output_text, total_debt = generate_payments(winners, losers)
-        
+        payments, total_debt = generate_payments(winners, losers)
+
         if total_debt > 0:
             debt_each = total_debt / 2
-            output_text += f"\nRemaining Debt to be split: {total_debt}\n"
-            output_text += f"Zane's debt: {debt_each}\n"
-            output_text += f"Austin's debt: {debt_each}\n"
+            st.write(f"Remaining Debt to be split: {total_debt}")
+            st.write(f"Zane's debt: {debt_each}")
+            st.write(f"Austin's debt: {debt_each}")
 
-        st.text(output_text)
+        st.dataframe(payments)
 
 if __name__ == "__main__":
     main()

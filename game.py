@@ -83,19 +83,20 @@ def main():
         winners = add_early_payments(winners, early_moneyZ, early_moneyA)
 
         total_winning = sum(winners['This Week'])
+        
         if total_winning > total_funds:
             st.write("Warning: Total winnings are greater than total funds available. Remaining debt will be split between Zane and Austin.")
-
+        
         st.write('PAYMENTS')
-        payments, total_debt = generate_payments(winners, losers)
-
-        st.dataframe(payments)
+        output_text, total_debt = generate_payments(winners, losers)
         
         if total_debt > 0:
             debt_each = total_debt / 2
-            st.write(f"Remaining Debt to be split: {total_debt}")
-            st.write(f"Zane's debt: {debt_each}")
-            st.write(f"Austin's debt: {debt_each}")
+            output_text += f"\nRemaining Debt to be split: {total_debt}\n"
+            output_text += f"Zane's debt: {debt_each}\n"
+            output_text += f"Austin's debt: {debt_each}\n"
+
+        st.text(output_text)
 
 if __name__ == "__main__":
     main()

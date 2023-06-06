@@ -29,8 +29,6 @@ def add_early_payments(winners, early_moneyZ, early_moneyA):
     winners = pd.concat([winners, zane, austin], ignore_index=True)
     return winners
 
-
-
 def generate_payments(winners, losers):
     n_winners = winners.shape[0]
     n_losers = losers.shape[0]
@@ -62,7 +60,6 @@ def generate_payments(winners, losers):
 
     return payments, total_debt
 
-
 def main():
     uploaded_file = st.file_uploader("Upload your excel file", type=["xlsx"])
     if uploaded_file is not None:
@@ -83,21 +80,19 @@ def main():
         winners = add_early_payments(winners, early_moneyZ, early_moneyA)
 
         total_winning = sum(winners['This Week'])
-        
+
         if total_winning > total_funds:
             st.write("Warning: Total winnings are greater than total funds available. Remaining debt will be split between Zane and Austin.")
-        
+
         st.write('PAYMENTS')
-        output_text, total_debt = generate_payments(winners, losers)
-        
+        payments, total_debt = generate_payments(winners, losers)
+
         if total_debt > 0:
             debt_each = total_debt / 2
-            output_text += f"\nRemaining Debt to be split: {total_debt}\n"
-            output_text += f"Zane's debt: {debt_each}\n"
-            output_text += f"Austin's debt: {debt_each}\n"
+            payments = payments.append({'Payer': 'Zane', 'Receiver': 'Zane', 'Amount': debt_each}, ignore_index=True)
+            payments = payments.append({'Payer': 'Austin', 'Receiver': 'Austin', 'Amount': debt_each}, ignore_index=True)
 
-        st.text(output_text)
+        st.dataframe(payments)
 
 if __name__ == "__main__":
     main()
-

@@ -89,13 +89,13 @@ def main():
         st.write('PAYMENTS')
         payments, total_debt = generate_payments(winners, losers)
 
+        st.dataframe(payments)
+        
         if total_debt > 0:
             debt_each = total_debt / 2
             st.write(f"Remaining Debt to be split: {total_debt}")
             st.write(f"Zane's debt: {debt_each}")
             st.write(f"Austin's debt: {debt_each}")
-
-        st.dataframe(payments)
 
 if __name__ == "__main__":
     main()

@@ -24,10 +24,11 @@ def get_winners_and_losers(df):
     return winners, losers
 
 def add_early_payments(winners, early_moneyZ, early_moneyA):
-    print(winners)  # print the winners before appending
+    print(type(winners))  # print the type of winners
     winners = winners.append({'Agent':'Zane','This Week':early_moneyZ}, ignore_index=True)
     winners = winners.append({'Agent':'Austin','This Week':early_moneyA}, ignore_index=True)
     return winners
+
 
 
 def generate_payments(winners, losers):

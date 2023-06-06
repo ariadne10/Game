@@ -85,15 +85,16 @@ def main():
             st.write("Warning: Total winnings are greater than total funds available. Remaining debt will be split between Zane and Austin.")
 
         st.write('PAYMENTS')
-        payments, total_debt = generate_payments(winners, losers)
 
-        if total_debt > 0:
-            debt_each = total_debt / 2
-            payments = payments.append({'Payer': 'Zane', 'Receiver': 'Zane', 'Amount': debt_each}, ignore_index=True)
-            payments = payments.append({'Payer': 'Austin', 'Receiver': 'Austin', 'Amount': debt_each}, ignore_index=True)
+        if st.button('Generate Payments'):
+            payments, total_debt = generate_payments(winners, losers)
 
-        st.write('PAYMENTS')
-        st.dataframe(payments)
+            if total_debt > 0:
+                debt_each = total_debt / 2
+                payments = payments.append({'Payer': 'Zane', 'Receiver': 'Zane', 'Amount': debt_each}, ignore_index=True)
+                payments = payments.append({'Payer': 'Austin', 'Receiver': 'Austin', 'Amount': debt_each}, ignore_index=True)
+
+            st.dataframe(payments)
 
 if __name__ == "__main__":
     main()

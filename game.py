@@ -49,12 +49,12 @@ def generate_payments(winners, losers):
             count_winner += 1
             winner_amount = winners.iloc[count_winner, 1]
 
-        if loser_amount < winner_amount or count_winner == n_winners:
-            winner_amount -= loser_amount
-            output_text += f"{losers.iloc[count_loser, 0]} pays {winners.iloc[count_winner, 0]} {loser_amount}\n"
-            if count_loser < n_losers - 1:
-                count_loser += 1
-                loser_amount = losers.iloc[count_loser, 1]
+        if loser_amount > winner_amount or count_loser == n_losers:
+            loser_amount -= winner_amount
+            output_text += f"{losers.iloc[count_loser, 0]} pays {winners.iloc[count_winner, 0]} {winner_amount}\n"
+            if count_winner < n_winners - 1:
+                count_winner += 1
+                winner_amount = winners.iloc[count_winner, 1]
 
 
         if count_winner == n_winners and winner_amount > 0:
